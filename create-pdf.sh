@@ -1,0 +1,1 @@
+pandoc -f gfm -t html5 --metadata pagetitle="README.md" --css styles.css README.md -o documentation.pdf -V geometry:margin=0.5in
