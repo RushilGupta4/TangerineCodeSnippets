@@ -4,7 +4,7 @@
 
 ## Overview
 
-This documentation provides simple code snippets for users with limited technical knowledge to implement advanced features in Tangerine.
+This documentation provides simple code snippets for users with limited technical knowledge to implement advanced features in [Tangerine](https://www.tangerinecentral.org/).
 
 ## Table Of Contents
 
