@@ -18,7 +18,9 @@ This manual covers basic use cases of Tangerine and how to develop basic assessm
 
 4. [Auto-Stop Timed Grids](#auto-stop-timed-grids)
 
-5. [Last Steps](#last-steps)
+5. [Auto-Stop Untimed Grids](#auto-stop-untimed-grids)
+
+6. [Last Steps](#last-steps)
 
 <div style="page-break-after: always;"></div>
 
@@ -246,11 +248,9 @@ onchange="
             }
         }
 
-        if (count >= threshold) {
-            this.duration = 0;
-            setInterval(() => {
-            this.duration = 60;
-            }, 1000);
+        if (count >= threshold && !this.gridAutoStopped) {
+            this.stopGrid();
+            this.gridAutoStopped = true;
         }
     }
 "
@@ -284,13 +284,98 @@ Here is an example of what your `<tangy-timed>` element would look like once you
             }
         }
 
-        if (count >= threshold) {
-            this.duration = 0;
-            setInterval(() => {
-            this.duration = 60;
-            }, 1000);
+        if (count >= threshold && !this.gridAutoStopped) {
+            this.stopGrid();
+            this.gridAutoStopped = true;
         }
     }
+"></tangy-timed>
+```
+
+<div style="page-break-after: always;"></div>
+
+## Auto-Stop Untimed Grids
+
+---
+
+This section goes over implementing an auto-stop feature for timed grids when the user answers incorrectly a certain number of times consecutively.
+
+### Pre-Steps
+
+Click the `Edit HTML` option of Tangerine, and copy the code to any desirable code editor, like VSCode. If you aren't comfortable with code editors, proceed to edit the HTML within the given input box.
+
+_Note: Make sure to save a copy of the HTML file (copy and paste the HTML to a .txt file)_
+
+### Code Snippet
+
+Find the correct `<tangy-untimed-grid>` element in the HTML by searching for the variable's name in the HTML until you find the correct one. Now, insert the following code into the `<tangy-untimed-grid>` element you found! Also, make sure to change the value of `alertMessage` to the message you want to show to the user when the grid is stopped.
+
+```javascript
+onchange="
+    if (1 == 1) {
+        const buttons = this.shadowRoot.querySelectorAll('tangy-toggle-button');
+        let count = 0;
+        let threshold = 4; // Number of consecutive words inccorect
+        let alertMessage = 'Message'; // Add message here
+
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].pressed) {
+            count++;
+            if (count >= threshold) {
+                break;
+            }
+            } else {
+            count = 0;
+            }
+        }
+
+        if (count >= 4) {
+          setTimeout(() => {
+            alert(alertMessage);
+            this.mode = 'TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED';
+          }, 250);
+        }
+    }
+"
+```
+
+_Note: Customize the code by editing the_ `threshold` _variable to set the number of answers incorrect to stop the grid_
+
+<div style="page-break-after: always;"></div>
+
+### Example
+
+Here is an example of what your `<tangy-timed>` element would look like once you have added the code.
+
+```javascript
+<tangy-timed
+  ... // pre-exsiting code
+  onchange="
+    if (1 == 1) {
+        const buttons = this.shadowRoot.querySelectorAll('tangy-toggle-button');
+        let count = 0;
+        let threshold = 4; // Number of consecutive words inccorect
+        let alertMessage = 'Message'; // Add message here
+
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].pressed) {
+            count++;
+            if (count >= threshold) {
+                break;
+            }
+            } else {
+            count = 0;
+            }
+        }
+
+        if (count >= 4) {
+          setTimeout(() => {
+            alert(alertMessage);
+            this.mode = 'TANGY_UNTIMED_GRID_MODE_LAST_ATTEMPTED';
+          }, 250);
+        }
+    }
+"
 "></tangy-timed>
 ```
 
